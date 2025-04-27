@@ -12,6 +12,16 @@ namespace Rogue
         public int mapWidth;
         public int[] mapTiles;
 
+        public int Width
+        {
+            get { return mapWidth; }
+        }
+
+        public int Height
+        {
+            get { return mapTiles.Length / mapWidth; }
+        }
+
         public int getTile(int x, int y)
         {
             int index = x + y * mapWidth;
@@ -21,7 +31,7 @@ namespace Rogue
 
         public void Draw()
         {
-            int mapHeight = mapTiles.Length / mapWidth;
+            int mapHeight = Height; 
             for (int y = 0; y < mapHeight; y++)
             {
                 for (int x = 0; x < mapWidth; x++)

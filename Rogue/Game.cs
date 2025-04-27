@@ -85,11 +85,9 @@ namespace Rogue
             PlayerCharacter player = new PlayerCharacter(
                 AskName(),
                 AskRace(),
-                AskClass(),
-                Raylib.GREEN
+                AskClass()
             );
 
-            player.paikka = new Vector2(1, 1);
             return player;
         }
 
@@ -102,18 +100,19 @@ namespace Rogue
 
         private void Init()
         {
+            Raylib.InitWindow(480, 270, "Rogue");
             player = CreateCharacter();
+            player.LoadTexture();
             MapReader loader = new MapReader();
             level01 = loader.LoadMapFromFile("mapfile.json");
-            Raylib.InitWindow(480, 270, "Rogue");
             Raylib.SetTargetFPS(30);
         }
 
         private void DrawGame()
         {
             Raylib.BeginDrawing();
+            Raylib.ClearBackground(Raylib.DARKGRAY);
 
-            Console.Clear();
             level01.Draw();
             player.Draw();
 
@@ -145,17 +144,14 @@ namespace Rogue
             int newX = (int)player.paikka.X + moveX;
             int newY = (int)player.paikka.Y + moveY;
 
-            newX = Math.Clamp(newX, 0, Raylib.GetScreenWidth() - 1);
-            newY = Math.Clamp(newY, 0, Raylib.GetScreenHeight() - 1);
+            newX = Math.Clamp(newX, 0, level01.Width - 1);
+            newY = Math.Clamp(newY, 0, level01.Height - 1);
 
             int tile = level01.getTile(newX, newY);
-            if (tile == 1)
+            if (tile == 1) 
             {
                 player.paikka.X = newX;
                 player.paikka.Y = newY;
-            }
-            else if (tile == 3)
-            {
             }
         }
 

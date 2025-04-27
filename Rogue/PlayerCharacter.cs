@@ -27,21 +27,34 @@ namespace Rogue
         public string name;
         public Race rotu;
         public Class luokka;
-        public Vector2 paikka;
-        public Color playerColor;
+        public Vector2 paikka; 
+        public Texture playerImage;
 
-        public PlayerCharacter(string name, Race rotu, Class luokka, Color color)
+        public PlayerCharacter(string name, Race rotu, Class luokka)
         {
             this.name = name;
             this.rotu = rotu;
             this.luokka = luokka;
-            this.playerColor = color;
+            this.paikka = new Vector2(1, 1); 
+        }
+
+        public void LoadTexture()
+        {
+            playerImage = Raylib.LoadTexture(@"C:\Github\Net-Rogue\Rogue\Images\Player.png");
+
+            if (playerImage.id == 0)
+            {
+                Console.WriteLine("Failed to load texture!");
+            }
+            else
+            {
+                Console.WriteLine("Texture loaded successfully!");
+            }
         }
 
         public void Draw()
         {
-            Console.SetCursorPosition((int)paikka.X, (int)paikka.Y);
-            Console.Write("@");
+            Raylib.DrawTextureV(playerImage, new Vector2(paikka.X * Game.tileSize, paikka.Y * Game.tileSize), Raylib.WHITE);
         }
     }
 }
