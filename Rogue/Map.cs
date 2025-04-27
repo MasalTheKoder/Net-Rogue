@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZeroElectric.Vinculum;
 
 namespace Rogue
 {
     internal class Map
     {
         public int mapWidth;
-        public int[] mapTiles; 
-        
-        public int getTile(int x, int y) 
+        public int[] mapTiles;
+
+        public int getTile(int x, int y)
         {
             int index = x + y * mapWidth;
             int tileId = mapTiles[index];
@@ -20,35 +21,41 @@ namespace Rogue
 
         public void Draw()
         {
-
-
-            Console.ForegroundColor = ConsoleColor.Gray; // Change to map color
-            int mapHeight = mapTiles.Length / mapWidth; // Calculate the height: the amount of rows
-            for (int y = 0; y < mapHeight; y++) // for each row
+            int mapHeight = mapTiles.Length / mapWidth;
+            for (int y = 0; y < mapHeight; y++)
             {
-                for (int x = 0; x < mapWidth; x++) // for each column in the row
+                for (int x = 0; x < mapWidth; x++)
                 {
-                    int index = x + y * mapWidth; // Calculate index of tile at (x, y)
-                    int tileId = mapTiles[index]; // Read the tile value at index
+                    int index = x + y * mapWidth;
+                    int tileId = mapTiles[index];
 
-                    // Draw the tile graphics
-                    Console.SetCursorPosition(x, y);
+                    int drawPixelX = x * Game.tileSize;
+                    int drawPixelY = y * Game.tileSize;
+
                     switch (tileId)
                     {
                         case 1:
-                            Console.Write("."); // Floor
+                            Raylib.DrawRectangle(drawPixelX, drawPixelY, Game.tileSize, Game.tileSize, Raylib.DARKGRAY);
                             break;
                         case 2:
-                            Console.Write("#"); // Wall
+                            Raylib.DrawRectangle(drawPixelX, drawPixelY, Game.tileSize, Game.tileSize, Raylib.DARKGREEN);
                             break;
-                        case 3: Console.Write(">");
+                        case 3:
+                            Raylib.DrawText(">", drawPixelX + 4, drawPixelY + 4, Game.tileSize, Raylib.RED);
                             break;
                         default:
-                            Console.Write(" ");
+                            Raylib.DrawRectangle(drawPixelX, drawPixelY, Game.tileSize, Game.tileSize, Raylib.BLACK);
                             break;
                     }
                 }
             }
+        }
+
+        public void ClearTile(int x, int y)
+        {
+            int drawPixelX = x * Game.tileSize;
+            int drawPixelY = y * Game.tileSize;
+            Raylib.DrawRectangle(drawPixelX, drawPixelY, Game.tileSize, Game.tileSize, Raylib.BLACK);
         }
     }
 }
