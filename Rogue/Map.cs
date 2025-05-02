@@ -3,24 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 using ZeroElectric.Vinculum;
 
 namespace Rogue
 {
+    public enum MapTile : int
+    {
+        Floor = 48,
+        Wall = 40
+    }
+
     internal class Map
     {
         public int mapWidth;
         public int[] mapTiles;
+        public Texture spriteAtlas;
+        const int imagesPerRow = 12;
 
-        public int Width
-        {
-            get { return mapWidth; }
-        }
-
-        public int Height
-        {
-            get { return mapTiles.Length / mapWidth; }
-        }
+        public int Width => mapWidth;
+        public int Height => mapTiles.Length / mapWidth;
 
         public int getTile(int x, int y)
         {
@@ -29,29 +31,35 @@ namespace Rogue
             return tileId;
         }
 
+        public MapTile GetTileAt(int x, int y)
+        {
+            int indexInMap = x + y * mapWidth;
+            int mapTileAtIndex = mapTiles[indexInMap];
+            return (MapTile)mapTileAtIndex;
+        }
+
         public void Draw()
         {
-            int mapHeight = Height; 
-            for (int y = 0; y < mapHeight; y++)
+            for (int y = 0; y < Height; y++)
             {
-                for (int x = 0; x < mapWidth; x++)
+                for (int x = 0; x < Width; x++)
                 {
                     int index = x + y * mapWidth;
                     int tileId = mapTiles[index];
 
+                    int imageX = tileId % imagesPerRow;
+                    int imageY = (int)(tileId / imagesPerRow);
+
                     int drawPixelX = x * Game.tileSize;
                     int drawPixelY = y * Game.tileSize;
 
-                    switch (tileId)
+                    switch ((MapTile)tileId)
                     {
-                        case 1:
+                        case MapTile.Floor:
                             Raylib.DrawRectangle(drawPixelX, drawPixelY, Game.tileSize, Game.tileSize, Raylib.DARKGRAY);
                             break;
-                        case 2:
+                        case MapTile.Wall:
                             Raylib.DrawRectangle(drawPixelX, drawPixelY, Game.tileSize, Game.tileSize, Raylib.DARKGREEN);
-                            break;
-                        case 3:
-                            Raylib.DrawText(">", drawPixelX + 4, drawPixelY + 4, Game.tileSize, Raylib.RED);
                             break;
                         default:
                             Raylib.DrawRectangle(drawPixelX, drawPixelY, Game.tileSize, Game.tileSize, Raylib.BLACK);
@@ -60,6 +68,10 @@ namespace Rogue
                 }
             }
         }
+        public void LoadTexture()
+        {
+            spriteAtlas = Raylib.LoadTexture(@"Images\Map.png");
+        }
 
         public void ClearTile(int x, int y)
         {
@@ -67,5 +79,7 @@ namespace Rogue
             int drawPixelY = y * Game.tileSize;
             Raylib.DrawRectangle(drawPixelX, drawPixelY, Game.tileSize, Game.tileSize, Raylib.BLACK);
         }
+
+
     }
 }

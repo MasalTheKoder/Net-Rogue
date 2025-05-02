@@ -105,6 +105,7 @@ namespace Rogue
             player.LoadTexture();
             MapReader loader = new MapReader();
             level01 = loader.LoadMapFromFile("mapfile.json");
+            level01.LoadTexture();
             Raylib.SetTargetFPS(30);
         }
 
@@ -147,8 +148,8 @@ namespace Rogue
             newX = Math.Clamp(newX, 0, level01.Width - 1);
             newY = Math.Clamp(newY, 0, level01.Height - 1);
 
-            int tile = level01.getTile(newX, newY);
-            if (tile == 1) 
+            MapTile tile = level01.GetTileAt(newX, newY);
+            if (tile == MapTile.Floor) 
             {
                 player.paikka.X = newX;
                 player.paikka.Y = newY;

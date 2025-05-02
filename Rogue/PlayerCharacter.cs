@@ -40,7 +40,7 @@ namespace Rogue
 
         public void LoadTexture()
         {
-            playerImage = Raylib.LoadTexture(@"C:\Github\Net-Rogue\Rogue\Images\Player.png");
+            playerImage = Raylib.LoadTexture(@"Images\Player.png");
 
             if (playerImage.id == 0)
             {
