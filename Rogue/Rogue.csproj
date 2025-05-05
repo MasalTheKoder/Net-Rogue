@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="mapfile_layers.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="mapfile_layers.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Raylib-cs" Version="7.0.1" />
     <PackageReference Include="Raylib-CSharp-Vinculum" Version="5.0.1" />

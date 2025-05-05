@@ -103,9 +103,12 @@ namespace Rogue
             Raylib.InitWindow(480, 270, "Rogue");
             player = CreateCharacter();
             player.LoadTexture();
+
             MapReader loader = new MapReader();
-            level01 = loader.LoadMapFromFile("mapfile.json");
+            level01 = loader.LoadMapFromFile("mapfile_layers.json"); // <- New JSON format
             level01.LoadTexture();
+            level01.LoadItems();
+            level01.LoadEnemies();
             Raylib.SetTargetFPS(30);
         }
 
@@ -148,17 +151,33 @@ namespace Rogue
             newX = Math.Clamp(newX, 0, level01.Width - 1);
             newY = Math.Clamp(newY, 0, level01.Height - 1);
 
-            MapTile tile = level01.GetTileAt(newX, newY);
-            if (tile == MapTile.Floor) 
+            MapLayer groundLayer = level01.GetLayer("ground");
+            int index = newX + newY * level01.Width;
+            int tileId = groundLayer.mapTiles[index];
+
+            if ((MapTile)tileId == MapTile.Floor)
             {
                 player.paikka.X = newX;
                 player.paikka.Y = newY;
+
+                Enemy enemy = level01.GetEnemyAt(newX, newY);
+                if (enemy != null)
+                {
+                    Console.WriteLine($"Pelaaja kohtasi vihollisen: {enemy.name}");
+                }
+
+                Item item = level01.GetItemAt(newX, newY);
+                if (item != null)
+                {
+                    Console.WriteLine($"Pelaaja löysi esineen: {item.name}");
+                }
             }
         }
 
+
         private void GameLoop()
         {
-            while (Raylib.WindowShouldClose() == false)
+            while (!Raylib.WindowShouldClose())
             {
                 DrawGame();
                 UpdateGame();
