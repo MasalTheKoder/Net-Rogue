@@ -4,6 +4,13 @@ using ZeroElectric.Vinculum;
 
 namespace Rogue
 {
+    public enum GameState
+    {
+        MainMenu,
+        Options,
+        Playing
+    }
+
     public class Game
     {
         PlayerCharacter player;
@@ -11,6 +18,54 @@ namespace Rogue
         public static readonly int tileSize = 16;
         List<int> WallTileNumbers = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19, 20, 24, 25, 26, 27, 28, 29, 40, 57, 58, 59 };
         private bool isGameRunning = false;
+
+        private GameState currentState;
+        private OptionsMenu optionsMenu;
+
+        public void Run()
+        {
+            Init();
+            optionsMenu = new OptionsMenu(this);
+            currentState = GameState.MainMenu;
+
+            while (!Raylib.WindowShouldClose())
+            {
+                switch (currentState)
+                {
+                    case GameState.MainMenu:
+                        DrawMainMenu();
+                        break;
+                    case GameState.Options:
+                        optionsMenu.Draw();
+                        break;
+                    case GameState.Playing:
+                        if (!isGameRunning)
+                        {
+                            StartGame();
+                            isGameRunning = true;
+                        }
+                        GameLoop();
+                        break;
+                }
+            }
+
+            Raylib.CloseWindow();
+        }
+
+        private void Init()
+        {
+            int screenWidth = 480;
+            int screenHeight = 480;
+
+            Raylib.InitWindow(screenWidth, screenHeight, "Rogue");
+            Raylib.SetWindowState(ConfigFlags.FLAG_WINDOW_RESIZABLE);
+            Raylib.SetTargetFPS(30);
+        }
+
+        public void ChangeState(GameState newState)
+        {
+            currentState = newState;
+        }
 
         private void DrawMainMenu()
         {
@@ -26,12 +81,13 @@ namespace Rogue
 
             if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Play Game") == 1)
             {
-                isGameRunning = true;
+                ChangeState(GameState.Playing);
             }
 
             buttonY += buttonHeight * 2;
             if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Settings") == 1)
             {
+                ChangeState(GameState.Options);
             }
 
             buttonY += buttonHeight * 2;
@@ -41,17 +97,6 @@ namespace Rogue
             }
 
             Raylib.EndDrawing();
-        }
-
-        private void Init()
-        {
-            int screenWidth = 480;
-            int screenHeight = 480;
-
-
-            Raylib.InitWindow(screenWidth, screenHeight, "Rogue");
-            Raylib.SetWindowState(ConfigFlags.FLAG_WINDOW_RESIZABLE);
-            Raylib.SetTargetFPS(30);
         }
 
         private void StartGame()
@@ -72,22 +117,6 @@ namespace Rogue
             {
                 DrawGame();
                 UpdateGame();
-            }
-            Raylib.CloseWindow();
-        }
-
-        public void Run()
-        {
-            Init();
-            while (!isGameRunning && !Raylib.WindowShouldClose())
-            {
-                DrawMainMenu();
-            }
-
-            if (isGameRunning)
-            {
-                StartGame();
-                GameLoop();
             }
         }
 
