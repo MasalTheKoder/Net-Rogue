@@ -8,8 +8,10 @@ namespace Rogue
     {
         MainMenu,
         Options,
-        Playing
+        Playing,
+        Paused
     }
+
 
     public class Game
     {
@@ -20,12 +22,15 @@ namespace Rogue
         private bool isGameRunning = false;
 
         private GameState currentState;
-        private OptionsMenu optionsMenu;
+        public OptionsMenu optionsMenu;
+        private PauseMenu pauseMenu;
+
 
         public void Run()
         {
             Init();
             optionsMenu = new OptionsMenu(this);
+            pauseMenu = new PauseMenu(this);
             currentState = GameState.MainMenu;
 
             while (!Raylib.WindowShouldClose())
@@ -46,7 +51,11 @@ namespace Rogue
                         }
                         GameLoop();
                         break;
+                    case GameState.Paused:
+                        pauseMenu.Draw();
+                        break;
                 }
+
             }
 
             Raylib.CloseWindow();
@@ -113,12 +122,20 @@ namespace Rogue
 
         private void GameLoop()
         {
-            while (!Raylib.WindowShouldClose() && isGameRunning)
+            while (!Raylib.WindowShouldClose() && isGameRunning && currentState == GameState.Playing)
             {
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_TAB))
+                {
+                    ChangeState(GameState.Paused);
+                    break;
+                }
+
                 DrawGame();
                 UpdateGame();
             }
         }
+
+
 
         private void DrawGame()
         {
