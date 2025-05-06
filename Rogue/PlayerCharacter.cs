@@ -35,7 +35,7 @@ namespace Rogue
             this.name = name;
             this.rotu = rotu;
             this.luokka = luokka;
-            this.paikka = new Vector2(1, 1); 
+            this.paikka = new Vector2(1, 3); 
         }
 
         public void LoadTexture()

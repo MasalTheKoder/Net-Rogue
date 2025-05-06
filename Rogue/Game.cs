@@ -9,8 +9,9 @@ namespace Rogue
         PlayerCharacter player;
         Map level01;
         public static readonly int tileSize = 16;
+        List <int> WallTileNumbers = new List<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17, 18, 19, 20, 24, 25, 26, 27, 28, 29, 40, 57, 58, 59};
 
-        private string AskName()
+    private string AskName()
         {
             while (true)
             {
@@ -105,7 +106,7 @@ namespace Rogue
             player.LoadTexture();
 
             MapReader loader = new MapReader();
-            level01 = loader.LoadMapFromFile("mapfile_layers.json"); // <- New JSON format
+            level01 = loader.LoadMapFromFile("tiledmap.tmj"); // <- New JSON format
             level01.LoadTexture();
             level01.LoadItems();
             level01.LoadEnemies();
@@ -155,7 +156,7 @@ namespace Rogue
             int index = newX + newY * level01.Width;
             int tileId = groundLayer.mapTiles[index];
 
-            if ((MapTile)tileId == MapTile.Floor)
+            if  (!WallTileNumbers.Contains(tileId))
             {
                 player.paikka.X = newX;
                 player.paikka.Y = newY;

@@ -69,7 +69,7 @@ namespace Rogue
                 for (int x = 0; x < mapWidth; x++)
                 {
                     int tileId = mapTiles[x + y * mapWidth];
-                    int spriteId = tileId;
+                    int spriteId = tileId -1;
 
                     Vector2 spritePosition = GetSpritePosition(spriteId, imagesPerRow);
                     Rectangle sourceRect = new Rectangle(spritePosition.X, spritePosition.Y, Game.tileSize, Game.tileSize);

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rogue", "Rogue.csproj", "{5261948F-C06D-4817-A9DB-4841D9CE4E8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TurboMapReader", "..\..\TurboMapReader-main\TurboMapReader.csproj", "{49F94A19-1C04-9C3C-140D-558A40CB1DB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5261948F-C06D-4817-A9DB-4841D9CE4E8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5261948F-C06D-4817-A9DB-4841D9CE4E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5261948F-C06D-4817-A9DB-4841D9CE4E8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49F94A19-1C04-9C3C-140D-558A40CB1DB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49F94A19-1C04-9C3C-140D-558A40CB1DB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49F94A19-1C04-9C3C-140D-558A40CB1DB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49F94A19-1C04-9C3C-140D-558A40CB1DB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
