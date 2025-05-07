@@ -1,37 +1,39 @@
-﻿using Rogue;
-using ZeroElectric.Vinculum;
+﻿using ZeroElectric.Vinculum;
 
-public class OptionsMenu
+namespace Rogue
 {
-    private Game game;
-    private GameState returnToState;
-
-    public OptionsMenu(Game game)
+    public class OptionsMenu
     {
-        this.game = game;
-        this.returnToState = GameState.MainMenu;
-    }
+        private Game game;
+        private GameState returnToState;
 
-    public void SetReturnState(GameState state)
-    {
-        returnToState = state;
-    }
-
-    public void Draw()
-    {
-        Raylib.BeginDrawing();
-        Raylib.ClearBackground(Raylib.BLACK);
-
-        int buttonWidth = 200;
-        int buttonHeight = 40;
-        int buttonX = Raylib.GetScreenWidth() / 2 - buttonWidth / 2;
-        int buttonY = Raylib.GetScreenHeight() / 2 - buttonHeight / 2;
-
-        if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Return") == 1)
+        public OptionsMenu(Game game)
         {
-            game.ChangeState(returnToState);
+            this.game = game;
+            this.returnToState = GameState.MainMenu;
         }
 
-        Raylib.EndDrawing();
+        public void SetReturnState(GameState state)
+        {
+            returnToState = state;
+        }
+
+        public void Draw()
+        {
+            Raylib.BeginDrawing();
+            Raylib.ClearBackground(Raylib.BLACK);
+
+            int buttonWidth = 200;
+            int buttonHeight = 40;
+            int buttonX = Raylib.GetScreenWidth() / 2 - buttonWidth / 2;
+            int buttonY = Raylib.GetScreenHeight() / 2 - buttonHeight / 2;
+
+            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Return") == 1)
+            {
+                game.ChangeState(returnToState);
+            }
+
+            Raylib.EndDrawing();
+        }
     }
 }

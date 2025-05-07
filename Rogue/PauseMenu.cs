@@ -1,46 +1,47 @@
-﻿using ZeroElectric.Vinculum;
+﻿using RayGuiCreator;
+using ZeroElectric.Vinculum;
 
 namespace Rogue
 {
     public class PauseMenu
     {
         private Game game;
+        private OptionsMenu optionsMenu;
 
-        public PauseMenu(Game game)
+        public PauseMenu(Game game, OptionsMenu optionsMenu)
         {
             this.game = game;
+            this.optionsMenu = optionsMenu;
         }
 
         public void Draw()
         {
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Raylib.DARKGRAY);
+            Raylib.ClearBackground(Raylib.BLACK);
 
             int buttonWidth = 200;
             int buttonHeight = 40;
             int buttonX = Raylib.GetScreenWidth() / 2 - buttonWidth / 2;
-            int buttonY = Raylib.GetScreenHeight() / 2 - buttonHeight / 2;
+            int buttonY = Raylib.GetScreenHeight() / 2 - buttonHeight * 3;
 
-            RayGui.GuiLabel(new Rectangle(buttonX, buttonY - buttonHeight * 2, buttonWidth, buttonHeight), "Pause Menu");
+            MenuCreator menu = new MenuCreator(buttonX, buttonY, buttonHeight, buttonWidth);
+            menu.Label("Pause Menu");
 
-            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Resume") == 1)
-            {
+            if (menu.Button("Resume"))
                 game.ChangeState(GameState.Playing);
+
+            menu.Label("");
+
+            if (menu.Button("Settings"))
+            {
+                optionsMenu.SetReturnState(GameState.Pause);
+                game.ChangeState(GameState.Options);
             }
 
-            buttonY += buttonHeight * 2;
+            menu.Label("");
 
-            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Options") == 1)
-            {
-                game.ChangeState(GameState.Options);  // Use GameState.Options instead of GameState.Settings
-            }
-
-            buttonY += buttonHeight * 2;
-
-            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Exit to Main Menu") == 1)
-            {
+            if (menu.Button("Exit to Main Menu"))
                 game.ChangeState(GameState.MainMenu);
-            }
 
             Raylib.EndDrawing();
         }

@@ -29,7 +29,7 @@ namespace Rogue
             Init();
 
             optionsMenu = new OptionsMenu(this);
-            pauseMenu = new PauseMenu(this);
+            pauseMenu = new PauseMenu(this, optionsMenu);
             characterCreation = new CharacterCreation(this);
 
             while (!Raylib.WindowShouldClose())
@@ -88,6 +88,7 @@ namespace Rogue
             buttonY += buttonHeight * 2;
             if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Settings") == 1)
             {
+                optionsMenu.SetReturnState(GameState.MainMenu);  
                 ChangeState(GameState.Options);
             }
 

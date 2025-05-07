@@ -49,41 +49,26 @@ namespace Rogue
             Raylib.ClearBackground(Raylib.BLACK);
 
             int buttonX = Raylib.GetScreenWidth() / 2 - ButtonWidth / 2;
-            int buttonY = Raylib.GetScreenHeight() / 2 - ButtonHeight / 2;
-            RayGuiCreator.MenuCreator menu = new MenuCreator(buttonX, buttonY, ButtonHeight, ButtonWidth);
+            int buttonY = Raylib.GetScreenHeight() / 2 - ButtonHeight * 5;
+
+            MenuCreator menu = new MenuCreator(buttonX, buttonY, ButtonHeight, ButtonWidth);
+
             menu.Label("Character Creation");
-
             menu.TextBox(playerNameEntry);
+            menu.Label(string.IsNullOrEmpty(playerNameEntry.ToString()) || !IsValidName(playerNameEntry.ToString())
+                ? "Name must be at least one letter."
+                : "Name is valid!");
 
-            if (string.IsNullOrEmpty(playerNameEntry.ToString()) || !IsValidName(playerNameEntry.ToString()))
-            {
-                RayGui.GuiLabel(new Rectangle(buttonX, buttonY, ButtonWidth, ButtonHeight), "Name must be at least one letter.");
-            }
-            else
-            {
-                RayGui.GuiLabel(new Rectangle(buttonX, buttonY, ButtonWidth, ButtonHeight), "Name is valid!");
-            }
-            buttonY += ButtonHeight;
+            menu.Label("");
+            menu.Label($"Race: {selectedRace}");
+            if (menu.Button("Select Race")) isRaceMenuOpen = true;
 
-            RayGui.GuiLabel(new Rectangle(buttonX, buttonY, ButtonWidth, ButtonHeight), $"Race: {selectedRace}");
-            buttonY += ButtonHeight;
+            menu.Label("");
+            menu.Label($"Class: {selectedClass}");
+            if (menu.Button("Select Class")) isClassMenuOpen = true;
 
-            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, ButtonWidth, ButtonHeight), "Select Race") == 1)
-            {
-                isRaceMenuOpen = true;
-            }
-            buttonY += ButtonHeight * 2;
-
-            RayGui.GuiLabel(new Rectangle(buttonX, buttonY, ButtonWidth, ButtonHeight), $"Class: {selectedClass}");
-            buttonY += ButtonHeight;
-
-            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, ButtonWidth, ButtonHeight), "Select Class") == 1)
-            {
-                isClassMenuOpen = true;
-            }
-            buttonY += ButtonHeight * 2;
-
-            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, ButtonWidth, ButtonHeight), "Start Game") == 1)
+            menu.Label("");
+            if (menu.Button("Start Game"))
             {
                 if (!string.IsNullOrEmpty(playerNameEntry.ToString()) && IsValidName(playerNameEntry.ToString()))
                 {
@@ -97,7 +82,7 @@ namespace Rogue
 
         private bool IsValidName(string name)
         {
-            if (name.Length < 2) return false;
+            if (name.Length < 1) return false;  
             foreach (char c in name)
             {
                 if (!char.IsLetter(c)) return false;
@@ -108,27 +93,29 @@ namespace Rogue
         private void DrawRaceSelectionMenu()
         {
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Raylib.DARKGRAY);
+            Raylib.ClearBackground(Raylib.BLACK);
 
             int buttonX = Raylib.GetScreenWidth() / 2 - ButtonWidth / 2;
-            int buttonY = Raylib.GetScreenHeight() / 2 - ButtonHeight / 2;
+            int buttonY = Raylib.GetScreenHeight() / 2 - ((ButtonHeight + Margin) * raceOptions.Length) / 2;
 
-            for (int i = 0; i < raceOptions.Length; i++)
+            MenuCreator menu = new MenuCreator(buttonX, buttonY, ButtonHeight, ButtonWidth);
+
+            foreach (string race in raceOptions)
             {
-                if (RayGui.GuiButton(new Rectangle(buttonX, buttonY + (ButtonHeight + Margin) * i, ButtonWidth, ButtonHeight), raceOptions[i]) == 1)
+                if (menu.Button(race))
                 {
-                    if (Enum.TryParse(raceOptions[i], out Race selected))
+                    if (Enum.TryParse(race, out Race selected))
                     {
                         selectedRace = selected;
                         isRaceMenuOpen = false;
+                        break;
                     }
                 }
+                menu.Label("");
             }
 
-            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY + (ButtonHeight + Margin) * raceOptions.Length, ButtonWidth, ButtonHeight), "Back") == 1)
-            {
+            if (menu.Button("Back"))
                 isRaceMenuOpen = false;
-            }
 
             Raylib.EndDrawing();
         }
@@ -136,27 +123,29 @@ namespace Rogue
         private void DrawClassSelectionMenu()
         {
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Raylib.DARKGRAY);
+            Raylib.ClearBackground(Raylib.BLACK);
 
             int buttonX = Raylib.GetScreenWidth() / 2 - ButtonWidth / 2;
-            int buttonY = Raylib.GetScreenHeight() / 2 - ButtonHeight / 2;
+            int buttonY = Raylib.GetScreenHeight() / 2 - ((ButtonHeight + Margin) * classOptions.Length) / 2;
 
-            for (int i = 0; i < classOptions.Length; i++)
+            MenuCreator menu = new MenuCreator(buttonX, buttonY, ButtonHeight, ButtonWidth);
+
+            foreach (string cls in classOptions)
             {
-                if (RayGui.GuiButton(new Rectangle(buttonX, buttonY + (ButtonHeight + Margin) * i, ButtonWidth, ButtonHeight), classOptions[i]) == 1)
+                if (menu.Button(cls))
                 {
-                    if (Enum.TryParse(classOptions[i], out Class selected))
+                    if (Enum.TryParse(cls, out Class selected))
                     {
                         selectedClass = selected;
                         isClassMenuOpen = false;
+                        break;
                     }
                 }
+                menu.Label("");
             }
 
-            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY + (ButtonHeight + Margin) * classOptions.Length, ButtonWidth, ButtonHeight), "Back") == 1)
-            {
+            if (menu.Button("Back"))
                 isClassMenuOpen = false;
-            }
 
             Raylib.EndDrawing();
         }
