@@ -14,24 +14,32 @@ namespace Rogue
         public void Draw()
         {
             Raylib.BeginDrawing();
-            Raylib.ClearBackground(Raylib.BLACK);
+            Raylib.ClearBackground(Raylib.DARKGRAY);
 
             int buttonWidth = 200;
             int buttonHeight = 40;
             int buttonX = Raylib.GetScreenWidth() / 2 - buttonWidth / 2;
             int buttonY = Raylib.GetScreenHeight() / 2 - buttonHeight / 2;
 
-            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Settings") == 1)
+            RayGui.GuiLabel(new Rectangle(buttonX, buttonY - buttonHeight * 2, buttonWidth, buttonHeight), "Pause Menu");
+
+            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Resume") == 1)
             {
-                game.optionsMenu.SetReturnState(GameState.Paused);
-                game.ChangeState(GameState.Options);
+                game.ChangeState(GameState.Playing);
             }
 
             buttonY += buttonHeight * 2;
 
-            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Close Menu") == 1)
+            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Options") == 1)
             {
-                game.ChangeState(GameState.Playing);
+                game.ChangeState(GameState.Options);  // Use GameState.Options instead of GameState.Settings
+            }
+
+            buttonY += buttonHeight * 2;
+
+            if (RayGui.GuiButton(new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight), "Exit to Main Menu") == 1)
+            {
+                game.ChangeState(GameState.MainMenu);
             }
 
             Raylib.EndDrawing();

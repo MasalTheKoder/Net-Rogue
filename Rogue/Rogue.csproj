@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\RayGuiCreator-main\RayGuiCreator\RayGuiCreator.csproj" />
     <ProjectReference Include="..\..\TurboMapReader-main\TurboMapReader.csproj" />
   </ItemGroup>
 
