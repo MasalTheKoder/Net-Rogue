@@ -3,7 +3,6 @@ using System;
 using System.IO;
 using TurboMapReader;
 
-
 namespace Rogue
 {
     internal class MapReader
@@ -21,7 +20,7 @@ namespace Rogue
                     line = reader.ReadLine();
                     if (line == null)
                     {
-                        break; // End of file
+                        break; // Reached end of file
                     }
                     Console.WriteLine(line);
                 }
@@ -39,44 +38,31 @@ namespace Rogue
             string fileContents;
             using (StreamReader reader = File.OpenText(fileName))
             {
-                fileContents = reader.ReadToEnd();
+                fileContents = reader.ReadToEnd(); // Read entire file
             }
 
             TurboMapReader.TiledMap mapMadeInTiled = TurboMapReader.MapReader.LoadMapFromFile(fileName);
-            Map loadedMap = ConvertTiledMapToMap(mapMadeInTiled);
+            Map loadedMap = ConvertTiledMapToMap(mapMadeInTiled); // Convert external map to game map
             return loadedMap;
         }
+
         public Map ConvertTiledMapToMap(TiledMap turboMap)
         {
-            // Luo tyhjä kenttä
             Map rogueMap = new Map();
 
-            // Muunna tason "ground" tiedot
             TurboMapReader.MapLayer groundLayer = turboMap.GetLayerByName("ground");
 
-            // TODO: Lue kentän leveys. Kaikilla TurboMapReader.MapLayer olioilla on sama leveys
             int groundWidth = groundLayer.width;
             rogueMap.mapWidth = groundWidth;
 
-            // Kuinka monta kenttäpalaa tässä tasossa on?
             int howManyTiles = groundLayer.data.Length;
-            // Taulukko jossa palat ovat
             int[] groundTiles = groundLayer.data;
 
-            // Luo uusi taso tietojen perusteella
             MapLayer myGroundLayer = new MapLayer(howManyTiles);
             myGroundLayer.name = "ground";
             myGroundLayer.mapTiles = groundTiles;
 
-
-
-
-            // TODO: lue tason palat
-
-
-
-            // Tallenna taso kenttään
-            rogueMap.layers[0] = myGroundLayer;
+            rogueMap.layers[0] = myGroundLayer; // Assign ground layer to index 0
 
             TurboMapReader.MapLayer enemyLayer = turboMap.GetLayerByName("enemies");
             howManyTiles = enemyLayer.data.Length;
@@ -84,7 +70,8 @@ namespace Rogue
             MapLayer myEnemyLayer = new MapLayer(howManyTiles);
             myEnemyLayer.name = "enemies";
             myEnemyLayer.mapTiles = enemyTiles;
-            rogueMap.layers[1] = myEnemyLayer;
+
+            rogueMap.layers[1] = myEnemyLayer; // Assign enemy layer to index 1
 
             TurboMapReader.MapLayer itemLayer = turboMap.GetLayerByName("items");
             howManyTiles = itemLayer.data.Length;
@@ -92,11 +79,10 @@ namespace Rogue
             MapLayer myItemLayer = new MapLayer(howManyTiles);
             myItemLayer.name = "items";
             myItemLayer.mapTiles = itemTiles;
-            rogueMap.layers[2] = myItemLayer;
 
+            rogueMap.layers[2] = myItemLayer; // Assign item layer to index 2
 
-            // Lopulta palauta kenttä
-            return rogueMap;
+            return rogueMap; // Return the fully built map
         }
     }
 }

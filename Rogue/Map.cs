@@ -58,6 +58,9 @@ namespace Rogue
             return new Vector2(spritePixelX, spritePixelY);
         }
 
+        /// <summary>
+        /// Draws the map, its items and enemies
+        /// </summary>
         public void Draw()
         {
             MapLayer groundLayer = GetLayer("ground");
@@ -107,6 +110,9 @@ namespace Rogue
         }
 
 
+        /// <summary>
+        /// Clears the tiles and draws them black
+        /// </summary>
         public void ClearTile(int x, int y)
         {
             int drawPixelX = x * Game.tileSize;
@@ -153,6 +159,9 @@ namespace Rogue
             }
         }
 
+        /// <summary>
+        /// Loads the items on the map
+        /// </summary>
         public void LoadItems()
         {
             MapLayer itemLayer = GetLayer("items");
@@ -163,7 +172,6 @@ namespace Rogue
             {
                 for (int x = 0; x < mapWidth; x++)
                 {
-                    // Laske paikka valmiiksi
                     Vector2 position = new Vector2(x, y);
 
                     int index = x + y * mapWidth;
@@ -172,40 +180,32 @@ namespace Rogue
 
                     if (tileId == 0)
                     {
-                        // Tässä kohdassa kenttää ei ole vihollista
                         continue;
                     }
                     else
                     {
-                        // Tässä kohdassa kenttää on jokin vihollinen
-
-                        // Tässä pitää vähentää 1,
-                        // koska Tiled editori tallentaa
-                        // palojen numerot alkaen 1:sestä.
                         int spriteId = tileId - 1;
 
-                        // Hae vihollisen nimi
                         string name = GetItemName(spriteId);
 
-                        // Luo uusi vihollinen ja lisää se listaan
                         items.Add(new Item(name, position, spriteId));
                     }
                 }
             }
         }
+        /// <summary>
+        /// Loads the enemy 
+        /// </summary>
         public void LoadEnemies()
         {
-            // Hae viholliset sisältävä taso kentästä
             MapLayer enemyLayer = GetLayer("enemies");
             int[] enemyTiles = enemyLayer.mapTiles;
             int layerHeight = enemyTiles.Length / mapWidth;
 
-            // Käy taso läpi ja luo viholliset
             for (int y = 0; y < layerHeight; y++)
             {
                 for (int x = 0; x < mapWidth; x++)
                 {
-                    // Laske paikka valmiiksi
                     Vector2 position = new Vector2(x, y);
 
                     int index = x + y * mapWidth;
@@ -214,22 +214,14 @@ namespace Rogue
 
                     if (tileId == 0)
                     {
-                        // Tässä kohdassa kenttää ei ole vihollista
                         continue;
                     }
                     else
                     {
-                        // Tässä kohdassa kenttää on jokin vihollinen
-
-                        // Tässä pitää vähentää 1,
-                        // koska Tiled editori tallentaa
-                        // palojen numerot alkaen 1:sestä.
                         int spriteId = tileId - 1;
 
-                        // Hae vihollisen nimi
                         string name = GetEnemyName(spriteId);
 
-                        // Luo uusi vihollinen ja lisää se listaan
                         enemies.Add(new Enemy(name, position, spriteId));
                     }
                 }

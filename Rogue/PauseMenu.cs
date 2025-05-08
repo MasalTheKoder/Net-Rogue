@@ -14,6 +14,9 @@ namespace Rogue
             this.optionsMenu = optionsMenu;
         }
 
+        /// <summary>
+        /// Draws the pause menu
+        /// </summary>
         public void Draw()
         {
             Raylib.BeginDrawing();

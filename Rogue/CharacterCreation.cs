@@ -4,6 +4,9 @@ using ZeroElectric.Vinculum;
 
 namespace Rogue
 {
+    /// <summary>
+    /// Handles ui for character creation, including selecting the players name, race and class.
+    /// </summary>
     public class CharacterCreation
     {
         private Game game;
@@ -20,11 +23,18 @@ namespace Rogue
         private const int Margin = 10;
         RayGuiCreator.TextBoxEntry playerNameEntry = new TextBoxEntry(15);
 
+        /// <summary>
+        /// Constructor for character creation screen.
+        /// </summary>
+        /// <param name="game">Reference to main game object</param>
         public CharacterCreation(Game game)
         {
             this.game = game;
         }
 
+        /// <summary>
+        /// Draws the character creation screen and conditionally opens race/class selection menus.
+        /// </summary>
         public void Draw()
         {
             if (!isRaceMenuOpen && !isClassMenuOpen)
@@ -80,6 +90,11 @@ namespace Rogue
             Raylib.EndDrawing();
         }
 
+        /// <summary>
+        /// Validates that the given player name consists only of letters and is at least 1 character long.
+        /// </summary>
+        /// <param name="name">Player name input</param>
+        /// <returns>True if valid, false otherwise</returns>
         private bool IsValidName(string name)
         {
             if (name.Length < 1) return false;  
@@ -90,6 +105,9 @@ namespace Rogue
             return true;
         }
 
+        /// <summary>
+        /// Displays the race selection menu and updates selected race.
+        /// </summary>
         private void DrawRaceSelectionMenu()
         {
             Raylib.BeginDrawing();
@@ -120,6 +138,9 @@ namespace Rogue
             Raylib.EndDrawing();
         }
 
+        /// <summary>
+        /// Same thing as the race menu but for class
+        /// </summary>
         private void DrawClassSelectionMenu()
         {
             Raylib.BeginDrawing();

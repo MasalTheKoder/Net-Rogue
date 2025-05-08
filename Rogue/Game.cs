@@ -10,9 +10,13 @@ namespace Rogue
         CharacterCreation,
         Playing,
         Options,
-        Pause
+        Pause,
+        GameOver
     }
-
+    
+    /// <summary>
+    /// Game handles the main game loop, state transitions, and rendering of core game screens.
+    /// </summary>
     public class Game
     {
         private PlayerCharacter player;
@@ -23,7 +27,11 @@ namespace Rogue
         private OptionsMenu optionsMenu;
         private PauseMenu pauseMenu;
         private CharacterCreation characterCreation;
+        private GameOver gameOverScreen;
 
+        /// <summary>
+        /// This starts the main game loop and handles state management.
+        /// </summary>
         public void Run()
         {
             Init();
@@ -31,6 +39,7 @@ namespace Rogue
             optionsMenu = new OptionsMenu(this);
             pauseMenu = new PauseMenu(this, optionsMenu);
             characterCreation = new CharacterCreation(this);
+            gameOverScreen = new GameOver(this);
 
             while (!Raylib.WindowShouldClose())
             {
@@ -55,12 +64,18 @@ namespace Rogue
                     case GameState.Pause:
                         pauseMenu.Draw();
                         break;
+                    case GameState.GameOver: 
+                        gameOverScreen.Draw();
+                        break;
                 }
             }
 
             Raylib.CloseWindow();
         }
 
+        /// <summary>
+        /// Initializes the game window and sets basic settings like resolution and Fps.
+        /// </summary>
         private void Init()
         {
             Raylib.InitWindow(480, 480, "Rogue");
@@ -68,6 +83,9 @@ namespace Rogue
             Raylib.SetTargetFPS(30);
         }
 
+        /// <summary>
+        /// Draws the main menu and handles button interactions for navigating the game.
+        /// </summary>
         private void DrawMainMenu()
         {
             Raylib.BeginDrawing();
@@ -101,12 +119,18 @@ namespace Rogue
             Raylib.EndDrawing();
         }
 
+        /// <summary>
+        /// The main game update loop; handles rendering and logic updates.
+        /// </summary>
         private void GameLoop()
         {
             DrawGame();
             UpdateGame();
         }
 
+        /// <summary>
+        /// Draws the game world stuff like the map and player.
+        /// </summary>
         private void DrawGame()
         {
             Raylib.BeginDrawing();
@@ -118,6 +142,9 @@ namespace Rogue
             Raylib.EndDrawing();
         }
 
+        /// <summary>
+        /// Updates player movement and interactions with map elements like enemies and items.
+        /// </summary>
         private void UpdateGame()
         {
             int moveX = 0;
@@ -144,18 +171,32 @@ namespace Rogue
                 player.paikka.Y = newY;
 
                 Enemy enemy = level01.GetEnemyAt(newX, newY);
-                if (enemy != null) Console.WriteLine($"Pelaaja kohtasi vihollisen: {enemy.name}");
+                if (enemy != null) Console.WriteLine($"Player encountered enemy: {enemy.name}");
 
                 Item item = level01.GetItemAt(newX, newY);
-                if (item != null) Console.WriteLine($"Pelaaja löysi esineen: {item.name}");
+                if (item != null)
+                {
+                    Console.WriteLine($"Player found item: {item.name}");
+                    ChangeState(GameState.GameOver); 
+                }
             }
         }
 
+        /// <summary>
+        /// Changes the current game state.
+        /// </summary>
+        /// <param name="newState">New game state to switch to</param>
         public void ChangeState(GameState newState)
         {
             currentState = newState;
         }
 
+        /// <summary>
+        /// Creates the player character and loads the initial map and game assets.
+        /// </summary>
+        /// <param name="name">Player name</param>
+        /// <param name="race">Chosen race</param>
+        /// <param name="cls">Chosen class</param>
         public void CreatePlayer(string name, Race race, Class cls)
         {
             player = new PlayerCharacter(name, race, cls);

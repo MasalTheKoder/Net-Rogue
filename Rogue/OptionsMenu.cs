@@ -18,6 +18,9 @@ namespace Rogue
             returnToState = state;
         }
 
+        /// <summary>
+        /// Draws the Settings menu
+        /// </summary>
         public void Draw()
         {
             Raylib.BeginDrawing();
